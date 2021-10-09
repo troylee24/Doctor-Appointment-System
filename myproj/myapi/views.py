@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework import status, generics, mixins
 from rest_framework.decorators import api_view
 from rest_framework.reverse import reverse
+from django_filters import rest_framework as filters
 
 @api_view(['GET'])
 def api_root(request):
@@ -30,9 +31,16 @@ class PatientDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Patient.objects.all()
     serializer_class = PatientSerializer
 
+class AppointmentFilter(filters.FilterSet):
+    class Meta:
+        model = Appointment
+        fields = ['id', 'doctor', 'patient', 'date', 'time', 'kind']
+
 class AppointmentList(mixins.ListModelMixin, generics.GenericAPIView):  
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
+    filter_backends = (filters.DjangoFilterBackend,)
+    filterset_class = AppointmentFilter
 
     def get(self, request, *args, **kwargs):
         return self.list(request, *args, **kwargs)
@@ -56,14 +64,6 @@ class AppointmentList(mixins.ListModelMixin, generics.GenericAPIView):
     def delete(self, request):
         Appointment.objects.all().delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
-
-    def get_queryset(self):
-        queryset = Appointment.objects.all()
-        doctor = self.request.query_params.get('doctor')
-        date = self.request.query_params.get('date')
-        if doctor and date:
-            queryset = queryset.filter(doctor=doctor, date=date)
-        return queryset
 
 class AppointmentDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Appointment.objects.all()

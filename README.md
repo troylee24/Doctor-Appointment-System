@@ -23,6 +23,7 @@ This project provides an appointment service where registered doctors and patien
 ```
 $ pip install django
 $ pip install djangorestframework
+$ pip install django-filter
 ```
 
 ## Getting Started
@@ -78,7 +79,7 @@ Interacts with the Doctor model
 Interacts with the Patient model
 * Show all patients: `GET /patients/`
 * Add new patient: `POST /patients/`
-* Show a patient: `GET /<patient.id>/`
+* Show a patient: `GET /patients/<patient.id>/`
 * Update a patient: `PUT /patients/<patient.id>/`
 * Delete a patient: `DELETE /patients/<patient.id>/`
 
@@ -91,12 +92,10 @@ Interacts with the Appointment model
 * Update an appointment: `PUT /appointments/<appointment.id>/`
 * Delete an appointment: `DELETE /appointments/<appointment.id>/`
 
-### Filtering
-* Doctor's appointment schedule for a given day: `/appointments/?doctor=<doctor.id>&date=<appointment.date>/`
-  
-### Filtering [To-Do]
-* Doctor's appointment schedule: `/appointments/?doctor=<doctor.id>/`
-* Patient's appointment schedule: `/appointments/?patient=<patient.id>/`
-* All appointments at a given time: `/appointments/?time=<appointment.time>/`
-* All appointments for a given day: `/appointments/?date=<appointment.date>/`
-* Doctor's appointment schedule with a given patient: `/appointments/?doctor=<doctor.id>&patient=<patient.id>/`
+---
+
+## Filtering
+
+### /appointments/
+`?id={}&doctor={}&patient={}&date={}&time={}&kind={}`
+* params: `appointment.id`, `doctor.id`, `patient.id`, `appointment.date`, `appointment.time`, `appointment.kind`
